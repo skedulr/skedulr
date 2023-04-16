@@ -1,4 +1,3 @@
-from flask import Flask, request, jsonify
 from threading import Thread
 import discord
 from discord.ext import commands
@@ -15,7 +14,6 @@ load_dotenv()
 discord_token = os.environ.get('DISCORD_TOKEN')
 backend = os.environ.get('BACKEND')
 
-app = Flask(__name__)
 
 intents = discord.Intents.default()
 intents.members = True
@@ -46,32 +44,32 @@ class Confirm(discord.ui.View):
         self.stop()
 
 
-class MyCog(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+# class MyCog(commands.Cog):
+#     def __init__(self, bot):
+#         self.bot = bot
 
-    async def send_reply(self, arg):
-        host = await bot.fetch_user(arg["host"])
-        attendee = arg["attendee"]
-        title = arg["title"]
-        meet = arg["meet"]
-        if meet:
-            await host.send(f'{attendee} has confirmed attendance of the meeting {title}.')
-        else:
-            await host.send(f'{attendee} has declined attendance of the meeting {title}.')
-        pass
+#     async def send_reply(self, arg):
+#         host = await bot.fetch_user(arg["host"])
+#         attendee = arg["attendee"]
+#         title = arg["title"]
+#         meet = arg["meet"]
+#         if meet:
+#             await host.send(f'{attendee} has confirmed attendance of the meeting {title}.')
+#         else:
+#             await host.send(f'{attendee} has declined attendance of the meeting {title}.')
+#         pass
 
-    async def send_unclear(self, arg):
-        user = await bot.fetch_user(arg["uid"])
-        await user.send("I'm sorry, I couldn't catch that. Could you make that clearer?")
-        pass
+#     async def send_unclear(self, arg):
+#         user = await bot.fetch_user(arg["uid"])
+#         await user.send("I'm sorry, I couldn't catch that. Could you make that clearer?")
+#         pass
 
 
 def run_discord_bot():
 
     @bot.event
     async def on_ready():
-        await bot.add_cog(MyCog(bot))
+        # await bot.add_cog(MyCog(bot))
         print('Bot is ready')
 
     @bot.event
@@ -158,17 +156,14 @@ def run_discord_bot():
     bot.run(discord_token)
 
 
-@app.route('/reply', methods=['POST'])
-def reply():
-    my_cog = bot.get_cog('MyCog')
-    data = request.json
-    bot.loop.create_task(my_cog.send_reply(data))
-    return jsonify({'message': 'DM sent!'})
+# @app.route('/reply', methods=['POST'])
+# def reply():
+#     my_cog = bot.get_cog('MyCog')
+#     data = request.json
+#     bot.loop.create_task(my_cog.send_reply(data))
+#     return jsonify({'message': 'DM sent!'})
 
 
 if __name__ == '__main__':
 
-    bot_thread = Thread(target=run_discord_bot)
-    bot_thread.start()
-
-    app.run()
+    run_discord_bot()
