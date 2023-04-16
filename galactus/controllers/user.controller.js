@@ -140,12 +140,12 @@ async function onParsedMessage(req, res) {
 
   const author = await User.findOne({ uids: [req.body.platform, `${req.body.uid}`] });
 
-  // await axios.post(new URL("/mail", process.env.MAIL_SERVER), {
-  //   ...req.body,
-  //   author: author.name,
-  //   platform: undefined,
-  //   uid: undefined,
-  // });
+  await axios.post(new URL("/mail", process.env.MAIL_SERVER), {
+    ...req.body,
+    author: author.name,
+    platform: undefined,
+    uid: undefined,
+  });
   return res.json({ ok: true });
 }
 
